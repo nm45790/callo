@@ -1,0 +1,38 @@
+// Prisma 스키마: DB 테이블을 코드로 정의하는 곳.
+// 여기서 모델을 바꾸고 `prisma migrate dev` 하면 실제 DB 테이블이 그대로 만들어짐.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // .env 파일의 접속 주소를 읽음
+}
+
+// 🏋️ 몸무게 기록 (날짜별로 한 줄씩)
+model WeightEntry {
+  id        Int      @id @default(autoincrement()) // 자동 증가 기본키
+  date      DateTime @db.Date // 날짜 (시간 없이)
+  weightKg  Float // 몸무게(kg)
+  note      String? // 메모 (선택 — ?는 비워도 됨)
+  createdAt DateTime @default(now()) // 입력한 시각 자동 기록
+}
+
+// 🍽️ 식사 기록
+model MealEntry {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @db.Date
+  mealType  MealType // 아침/점심/저녁/간식 (아래 enum)
+  name      String // 뭘 먹었는지
+  calories  Int? // 칼로리 (선택)
+  createdAt DateTime @default(now())
+}
+
+// 끼니 종류를 정해진 값으로만 받게 제한 (오타 방지)
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}

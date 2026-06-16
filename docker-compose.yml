@@ -1,0 +1,21 @@
+# 이 파일 하나로 Postgres DB를 띄우고 끈다.
+# 실행:  docker compose up -d   (백그라운드로 시작)
+# 중지:  docker compose down     (끄기, 데이터는 유지됨)
+services:
+  db:
+    image: postgres:17 # Docker Hub에서 Postgres 17 이미지를 받아옴
+    container_name: diet-log-db
+    restart: unless-stopped # 맥미니 재부팅돼도 자동으로 다시 켜짐 (홈서버용)
+    environment:
+      # 실제 값은 .env 파일에서 읽어옴 (git에 비번 안 올라가게)
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      # 127.0.0.1 로 묶어서 '이 맥미니 자신'만 접근 가능 (LAN/tailnet 노출 차단)
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - dietlog-data:/var/lib/postgresql/data # 데이터를 디스크에 저장(컨테이너 지워도 안 날아감)
+
+volumes:
+  dietlog-data:
