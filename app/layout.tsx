@@ -16,6 +16,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: `${BRAND.name} — ${BRAND.tagline}`,
   description: "AI와 함께 몸무게·식사·운동을 기록하고 주간/월간 리포트로 진행 상황을 코칭받는 다이어트 앱",
+  // 공개 노출 중 — 검색엔진 색인/추적 차단
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
